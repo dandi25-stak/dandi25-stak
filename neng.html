@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Selamat Ulang Tahun!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Comic Sans MS', cursive;
+      overflow: hidden;
+    }
+    h1 {
+      font-size: 3em;
+      color: white;
+      text-shadow: 2px 2px #ff6f91;
+      animation: fadeIn 2s ease-in-out;
+    }
+    p {
+      font-size: 1.5em;
+      color: white;
+      text-align: center;
+      max-width: 600px;
+      margin-top: 10px;
+      animation: fadeIn 3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+  <h1>Selamat Ulang Tahun Nengku...</h1>
+  <p>"Selamat ulang tahun untuk cintaku, cahaya hidupku, dan alasan aku tersenyum setiap hari."
+    - "Kamu adalah hadiah terindah dalam hidupku, dan hari ini adalah kesempatan untuk merayakan kehadiranmu I LOVE U" 🎉</p>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // Konfeti sederhana
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    let mp = 150; // jumlah partikel
+    let particles = [];
+
+    for (let i = 0; i < mp; i++) {
+      particles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 15 + 1,
+        d: Math.random() * mp,
+        color: "rgba(" +
+          ~~(Math.random() * 255) + "," +
+          ~~(Math.random() * 255) + "," +
+          ~~(Math.random() * 255) + ",1)",
+        tilt: Math.floor(Math.random() * 5) - 5
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < mp; i++) {
+        let p = particles[i];
+        ctx.beginPath();
+        ctx.lineWidth = p.r;
+        ctx.strokeStyle = p.color;
+        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+        ctx.stroke();
+      }
+
+      update();
+    }
+
+    let angle = 0;
+    function update() {
+      angle += 0.01;
+      for (let i = 0; i < mp; i++) {
+        let p = particles[i];
+        p.y += Math.cos(angle + p.d) + 1 + p.r / 2;
+        p.x += Math.sin(angle);
+        if (p.y > H) {
+          p.y = -10;
+          p.x = Math.random() * W;
+        }
+      }
+    }
+
+    setInterval(draw, 30);
+
+    // Update canvas saat jendela diubah ukurannya
+    window.addEventListener("resize", () => {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+    });
+  </script>
+</body>
+</html>
